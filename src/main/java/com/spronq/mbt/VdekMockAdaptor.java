@@ -4,16 +4,14 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
@@ -22,8 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 
 /**
- * For testing use netcat (nc -v 127.0.0.1 4444)
- *
+ * For testing use netcat: nc -v 127.0.0.1 4444
  */
 public class VdekMockAdaptor {
     private static final String baseUrl = "http://localhost:8080";
@@ -60,22 +57,49 @@ public class VdekMockAdaptor {
         String response = "";
         String[] tokens = line.split("[(,)]+");
 
-        switch(tokens[0]) {
-            case "PostUser_Req":
+        switch (tokens[0].toUpperCase()) {
+            case "POSTUSER_REQ":
+                response = PostUser(tokens);
                 break;
-            case "GetUsersByEmail_Req":
-                response = GetUsersByEmail(tokens);
+            case "GETUSERBYEMAIL_REQ":
+                response = GetUserByEmail(tokens);
                 break;
-            case "GetUserById_Req":
+            case "GETUSERBYID_REQ":
                 response = GetUserById(tokens);
                 break;
-            case "PostShipment_Req":
+            case "POSTSHIPMENT_REQ":
+                response = PostShipment(tokens);
                 break;
-            case "GetShipment_Req":
+            case "GETSHIPMENT_REQ":
                 response = getShipment(tokens);
                 break;
             default :
                 System.out.println("ERR - Unknown call: " + tokens[0]);
+        }
+
+        return response;
+    }
+
+    private static String PostUser(String[] tokens) {
+        RestTemplate restTemplate  = new RestTemplate();
+        String response;
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set("Content-Type", "application/json");
+
+        JSONObject user = new JSONObject();
+        user
+            .put("email", tokens[1])
+            .put("label", tokens[2])
+            .put("customerNumber", tokens[3]);
+
+        try {
+            HttpEntity<String> httpEntity = new HttpEntity<>(user.toString(), httpHeaders);
+            String re = restTemplate.postForObject(baseUrl + "/users", httpEntity, String.class);
+            response = makeUserOutput(new JSONObject(re));
+            response = "PostUser_Resp(" + response + ")";
+        } catch (HttpClientErrorException ex) {
+            response = "PostUser_Resp_Err(" + ex.getRawStatusCode() + ")";
         }
 
         return response;
@@ -103,7 +127,7 @@ public class VdekMockAdaptor {
     }
 
 
-    private static String GetUsersByEmail(String[] tokens) {
+    private static String GetUserByEmail(String[] tokens) {
         RestTemplate restTemplate;
         String response = "";
 
@@ -145,6 +169,57 @@ public class VdekMockAdaptor {
             response = "GetShipment_Resp(" + response + ")";
         } catch (HttpClientErrorException ex) {
             response = "GetShipment_Resp_Err(" + ex.getRawStatusCode() + ")";
+        }
+
+        return response;
+    }
+
+    private static String PostShipment(String[] tokens) {RestTemplate restTemplate  = new RestTemplate();
+        String response;
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set("Content-Type", "application/json");
+
+        SimpleDateFormat yyyymmddhh = new SimpleDateFormat("yyyymmddhh");
+        SimpleDateFormat mmss = new SimpleDateFormat("mmss");
+
+        JSONObject extShipment = new JSONObject();
+        extShipment
+            .put("customerNumber", tokens[3])
+            .put("ean", "9789034506801")
+            .put("orderId", yyyymmddhh.format(new Date()))
+            .put("orderLine", mmss.format(new Date()))
+            .put("schoolId", "1641")
+            .put("sessionId", "")
+            .put("emailAddress", tokens[1])
+            .put("label", "VDE")
+            .put("postalCode", "2323ab")
+            .put("firstName", "Bokito")
+            .put("middleName", "de")
+            .put("lastName", "Aap")
+            .put("groupName", "")
+            .put("administration", "Dynamics")
+            .put("address", "SomeStreet")
+            .put("addressNumber", "1")
+            .put("addressAdjunct", "")
+            .put("city", "SomeCity")
+            .put("country", "SomeCountry")
+            .put("gender", "M")
+            .put("birthDate", "2004-02-01")
+            .put("amount", "1")
+            .put("startDate", "2018-04-27")
+            .put("displayName", "SomeDisplayName")
+            .put("emailUser", tokens[2]);
+
+
+
+        try {
+            HttpEntity<String> httpEntity = new HttpEntity<>(extShipment.toString(), httpHeaders);
+            String re = restTemplate.postForObject(baseUrl + "/shipments", httpEntity, String.class);
+            response = makeShipmentOutput(new JSONObject(re));
+            response = "PostShipment_Resp(" + response + ")";
+        } catch (HttpClientErrorException ex) {
+            response = "PostShipment_Resp_Err(" + ex.getRawStatusCode() + ")";
         }
 
         return response;
