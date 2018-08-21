@@ -5,9 +5,12 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import com.sun.xml.internal.ws.api.ha.StickyFeature;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
@@ -72,12 +75,50 @@ public class VdekMockAdaptor {
         }
     }
 
-    private static String callApi(String line) {
-        String response = "";
-        //Fix this: handle empty values
-        String[] tokens = line.split("[(,)]+");
+    private static String checkInput(String line) {
+        if (line.length() == 0) {
+            return "No input";
+        } else if (!line.contains("(") || !line.contains(")")) {
+            return "Missing parentheses";
+        } else if (line.indexOf("(") == 0 ) {
+            return "Missing keyword";
+        } else {
+            return "";
+        }
+    }
 
-        switch (tokens[0].toUpperCase()) {
+    private static List<String> mySplit(String line) {
+        List<String> tokens = new ArrayList<>();
+
+        tokens.add(line.substring(0, line.indexOf("(")));
+
+        String s = line.substring(line.indexOf("(")+1, line.lastIndexOf(")"));
+        int i;
+        int j=-1;
+        for (i=0; i<s.length(); i++) {
+            if (s.substring(i, i+1).equalsIgnoreCase(",")) {
+                tokens.add(s.substring(j+1, i));
+                j=i;
+            }
+
+        }
+        tokens.add(s.substring(j+1, i));
+
+        return tokens;
+    }
+
+    private static String callApi(String line) {
+        String response;
+        List<String> tokens;
+
+        response = checkInput(line);
+        if (response.length() > 0) {
+            return response;
+        } else {
+            tokens = mySplit(line);
+        }
+
+        switch (tokens.get(0).toUpperCase()) {
             case "POSTUSER_REQ":
                 response = PostUser(tokens);
                 break;
@@ -100,16 +141,17 @@ public class VdekMockAdaptor {
                 response = getUserClaimsByUserId(tokens);
                 break;
             default :
-                System.out.println("ERR - Unknown call: " + tokens[0]);
+                System.out.println("ERR - Unknown call: " + tokens.get(0));
+                response = "Unknown keyword";
         }
 
         return response;
     }
 
-    private static String PostUser(String[] tokens) {
+    private static String PostUser(List<String> tokens) {
         String response;
 
-        if (tokens.length != 4){
+        if (tokens.size() != 4){
             response = "PostUser_Resp_Err(400)";
         } else {
             RestTemplate restTemplate  = new RestTemplate();
@@ -118,9 +160,9 @@ public class VdekMockAdaptor {
 
             JSONObject user = new JSONObject();
             user
-                    .put("email", tokens[1])
-                    .put("label", tokens[2])
-                    .put("postalCode", tokens[3]);
+                    .put("email", tokens.get(1))
+                    .put("label", tokens.get(2))
+                    .put("postalCode", tokens.get(3));
 
             try {
                 HttpEntity<String> httpEntity = new HttpEntity<>(user.toString(), httpHeaders);
@@ -137,12 +179,12 @@ public class VdekMockAdaptor {
     }
 
 
-    private static String GetUserById(String[] tokens) {
+    private static String GetUserById(List<String> tokens) {
         RestTemplate restTemplate;
         String response;
 
         UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(baseUrl + "/users/" + tokens[1]);
+                .fromUriString(baseUrl + "/users/" + tokens.get(1));
         String uriBuilder = builder.build().encode().toUriString();
 
         try {
@@ -158,13 +200,13 @@ public class VdekMockAdaptor {
     }
 
 
-    private static String GetUsersByEmail(String[] tokens) {
+    private static String GetUsersByEmail(List<String> tokens) {
         RestTemplate restTemplate;
         String response = "";
 
         UriComponentsBuilder builder = UriComponentsBuilder
                 .fromUriString(baseUrl + "/users")
-                .queryParam("email", tokens[1]);
+                .queryParam("email", tokens.get(1));
         String uriBuilder = builder.build().encode().toUriString();
 
         try {
@@ -192,8 +234,8 @@ public class VdekMockAdaptor {
     }
 
 
-    private static String getShipmentById(String[] tokens) {
-        String url = baseUrl + "/shipments/" + tokens[1];
+    private static String getShipmentById(List<String> tokens) {
+        String url = baseUrl + "/shipments/" + tokens.get(1);
         RestTemplate restTemplate;
         String response;
 
@@ -209,10 +251,11 @@ public class VdekMockAdaptor {
         return response;
     }
 
-    private static String PostShipment(String[] tokens) {RestTemplate restTemplate  = new RestTemplate();
+    private static String PostShipment(List<String> tokens) {
+        RestTemplate restTemplate  = new RestTemplate();
         String response;
 
-        if (tokens.length != 4) {
+        if (tokens.size() != 4) {
             response = "PostShipment_Resp_Err(400)";
         } else {
 
@@ -224,13 +267,13 @@ public class VdekMockAdaptor {
 
             JSONObject extShipment = new JSONObject();
             extShipment
-                    .put("customerNumber", tokens[3])
+                    .put("customerNumber", tokens.get(3))
                     .put("ean", "9789034506801")
                     .put("orderId", yyyymmddhh.format(new Date()))
                     .put("orderLine", mmss.format(new Date()))
                     .put("schoolId", "1641")
                     .put("sessionId", "")
-                    .put("emailAddress", tokens[1])
+                    .put("emailAddress", tokens.get(1))
                     .put("label", "VDE")
                     .put("postalCode", "2323ab")
                     .put("firstName", "Bokito")
@@ -248,7 +291,7 @@ public class VdekMockAdaptor {
                     .put("amount", "1")
                     .put("startDate", "2018-04-27")
                     .put("displayName", "SomeDisplayName")
-                    .put("emailUser", tokens[2]);
+                    .put("emailUser", tokens.get(2));
 
             try {
                 HttpEntity<String> httpEntity = new HttpEntity<>(extShipment.toString(), httpHeaders);
@@ -310,13 +353,13 @@ public class VdekMockAdaptor {
         return "UserClaim(" + response + ")";
     }
 
-    private static String getUserClaimsByUserId(String[] tokens) {
+    private static String getUserClaimsByUserId(List<String> tokens) {
         RestTemplate restTemplate;
         String response = "";
 
         UriComponentsBuilder builder = UriComponentsBuilder
                 .fromUriString(baseUrl + "/userclaims")
-                .queryParam("userId", tokens[1]);
+                .queryParam("userId", tokens.get(1));
         String uriBuilder = builder.build().encode().toUriString();
 
         try {
@@ -345,28 +388,31 @@ public class VdekMockAdaptor {
 
     }
 
-    private static String postUserClaim(String[] tokens) {
+    private static String postUserClaim(List<String> tokens) {
         RestTemplate restTemplate  = new RestTemplate();
         String response;
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("Content-Type", "application/json");
+        if (tokens.size() != 4) {
+            response = "PostShipment_Resp_Err(400)";
+        } else {
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.set("Content-Type", "application/json");
 
-        JSONObject uc = new JSONObject();
-        uc
-                .put("userId", tokens[1])
-                .put("claimType", tokens[2])
-                .put("claimValue", tokens[3]);
+            JSONObject uc = new JSONObject();
+            uc
+                    .put("userId", tokens.get(1))
+                    .put("claimType", tokens.get(2))
+                    .put("claimValue", tokens.get(3));
 
-        try {
-            HttpEntity<String> httpEntity = new HttpEntity<>(uc.toString(), httpHeaders);
-            String re = restTemplate.postForObject(baseUrl + "/userclaims", httpEntity, String.class);
-            response = makeUserClaimOutput(new JSONObject(re));
-            response = "PostUserClaim_Resp(" + response + ")";
-        } catch (HttpClientErrorException ex) {
-            response = "PostUserClaim_Resp_Err(" + ex.getRawStatusCode() + ")";
+            try {
+                HttpEntity<String> httpEntity = new HttpEntity<>(uc.toString(), httpHeaders);
+                String re = restTemplate.postForObject(baseUrl + "/userclaims", httpEntity, String.class);
+                response = makeUserClaimOutput(new JSONObject(re));
+                response = "PostUserClaim_Resp(" + response + ")";
+            } catch (HttpClientErrorException ex) {
+                response = "PostUserClaim_Resp_Err(" + ex.getRawStatusCode() + ")";
+            }
         }
-
         return response;
     }
 }
