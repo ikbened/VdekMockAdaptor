@@ -6,7 +6,7 @@ build:
         name: get code / compile / stage for docker.
         code: |
           cd /pipeline/source
-          mvn package
+          mvn clean package shade:shade
 
 
 build-docker-image:
