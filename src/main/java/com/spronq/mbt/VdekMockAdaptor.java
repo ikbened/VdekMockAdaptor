@@ -49,9 +49,10 @@ public class VdekMockAdaptor {
 
     public static void main(String[] args) throws IOException {
         int port = 4444;
+
         ServerSocket serverSocket = new ServerSocket(port, 50, InetAddress.getByAddress(new byte[]{0x7f, 0x00, 0x00, 0x01}));
         System.err.println("Started server on port " + port);
-        System.err.println("Sending requests to " + baseUrl);
+        System.err.println("Communication with VdekMock on " + baseUrl);
 
         while (true) {
             Socket clientSocket = serverSocket.accept();

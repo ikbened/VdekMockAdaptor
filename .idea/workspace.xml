@@ -7,7 +7,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f5813147-26be-4a03-a6a2-63d362bc480d" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/spronq/mbt/VdekMockAdaptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spronq/mbt/VdekMockAdaptor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/VdekMockAdaptor-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/VdekMockAdaptor-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/spronq/mbt/VdekMockAdaptor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/spronq/mbt/VdekMockAdaptor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/original-VdekMockAdaptor-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-VdekMockAdaptor-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.spronq.mbt.VdekMockAdaptorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.spronq.mbt.VdekMockAdaptorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.spronq.mbt.VdekMockAdaptorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.spronq.mbt.VdekMockAdaptorTest.txt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -23,14 +29,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="VdekMockAdaptor.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="VdekMockAdaptor.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/spronq/mbt/VdekMockAdaptor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="47" lean-forward="true" selection-start-line="47" selection-end-line="47" />
+            <state relative-caret-position="238">
+              <caret line="54" column="59" selection-start-line="54" selection-start-column="59" selection-end-line="54" selection-end-column="59" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitattributes" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitattributes">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
             </state>
           </provider>
         </entry>
@@ -457,7 +472,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/spronq/mbt/VdekMockAdaptor.java</url>
-          <line>243</line>
+          <line>245</line>
           <properties />
           <option name="timeStamp" value="3" />
         </line-breakpoint>
@@ -885,11 +900,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/spronq/mbt/VdekMockAdaptor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="47" lean-forward="true" selection-start-line="47" selection-end-line="47" />
+        <state relative-caret-position="238">
+          <caret line="54" column="59" selection-start-line="54" selection-start-column="59" selection-end-line="54" selection-end-column="59" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitattributes">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
         </state>
       </provider>
     </entry>
