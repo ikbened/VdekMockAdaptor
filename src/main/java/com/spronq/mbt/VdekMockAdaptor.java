@@ -44,7 +44,8 @@ import org.springframework.web.util.UriComponentsBuilder;
  *      PostShipment_Resp(5b793fe67ae2185d01fb7477,aap@aap.nl,user@mailinator.com,false,Customer email is not unique within LearnId)
  */
 public class VdekMockAdaptor {
-    private static final String baseUrl = "http://localhost:8080";
+    private static final String baseUrl = "http://"  + System.getenv("VdekMockAddress");
+            //localhost:8080";
 
     public static void main(String[] args) throws IOException {
         int port = 4444;
