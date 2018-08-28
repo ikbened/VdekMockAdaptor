@@ -20,7 +20,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-
 /**
  * For testing use netcat: nc -v 127.0.0.1 4444
  * Examples (request + response(s)):
