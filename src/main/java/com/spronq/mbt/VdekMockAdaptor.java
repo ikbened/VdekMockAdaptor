@@ -51,6 +51,7 @@ public class VdekMockAdaptor {
         int port = 4444;
         ServerSocket serverSocket = new ServerSocket(port, 50, InetAddress.getByAddress(new byte[]{0x7f, 0x00, 0x00, 0x01}));
         System.err.println("Started server on port " + port);
+        System.err.println("Sending requests to " + baseUrl);
 
         while (true) {
             Socket clientSocket = serverSocket.accept();
