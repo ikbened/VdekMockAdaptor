@@ -43,11 +43,17 @@ import org.springframework.web.util.UriComponentsBuilder;
  *      PostShipment_Resp(5b793fe67ae2185d01fb7477,aap@aap.nl,user@mailinator.com,false,Customer email is not unique within LearnId)
  */
 public class VdekMockAdaptor {
-    private static final String baseUrl = "http://"  + System.getenv("VdekMockAddress");
-            //localhost:8080";
+    private static String baseUrl;
 
     public static void main(String[] args) throws IOException {
         int port = 4444;
+
+        baseUrl = System.getenv("VdekMockAddress");
+        if (StringUtils.isEmpty(baseUrl)) {
+            baseUrl = "localhost:8080";
+        }
+        baseUrl = "http://" + baseUrl;
+
 
         ServerSocket serverSocket = new ServerSocket(port, 50, InetAddress.getByAddress(new byte[]{0x7f, 0x00, 0x00, 0x01}));
         System.err.println("Started server on port " + port);
