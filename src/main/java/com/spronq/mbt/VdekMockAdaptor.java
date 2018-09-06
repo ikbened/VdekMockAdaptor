@@ -49,6 +49,7 @@ public class VdekMockAdaptor {
         int port = 4444;
 
         baseUrl = System.getenv("VdekMockAddress");
+        System.out.println("baseUrl: " + baseUrl);
         if (StringUtils.isEmpty(baseUrl)) {
             baseUrl = "localhost:8080";
         }
