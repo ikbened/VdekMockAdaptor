@@ -1,0 +1,21 @@
+version: '3.1'
+services:
+  vdekmock:
+    image: edhi/vdekmock:latest
+    networks:
+      - vdek
+    hostname: vdekmock
+    ports:
+      - "18080:8080"
+  vdekmockadaptor:
+    image: edhi/vdekmockadaptor
+    networks:
+      - vdek
+    hostname: vdekmockadaptor
+    ports:
+      - "14444:4444"
+    environment:
+      - VdekMockAddress=${VDEKMOCKADDRESS:-vdekmock:8080}
+networks:
+  vdek:
+    driver: bridge
