@@ -56,7 +56,7 @@ public class VdekMockAdaptor {
         baseUrl = "http://" + baseUrl;
 
 
-        ServerSocket serverSocket = new ServerSocket(port, 50, InetAddress.getByAddress(new byte[]{0x7f, 0x00, 0x00, 0x01}));
+        ServerSocket serverSocket = new ServerSocket(port, 50, InetAddress.getByAddress(new byte[]{0x00, 0x00, 0x00, 0x01}));
         System.err.println("Started server on port " + port);
         System.err.println("Communication with VdekMock on " + baseUrl);
 
