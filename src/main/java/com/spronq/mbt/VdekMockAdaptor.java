@@ -21,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
- * For testing use netcat: nc -v 127.0.0.1 4444
+ * For testing use netcat: nc -v 127.0.0.1 14444
  * Examples (request + response(s)):
  * - PostUser_Req(aap@aap.nl,learnId,1234AB)
  *      PostUser_Resp(User(5b7931797ae2185d01fb7470,learnId,aap@aap.nl,1234AB))
