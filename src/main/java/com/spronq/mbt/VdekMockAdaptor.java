@@ -21,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
- * For testing use netcat: nc -v 127.0.0.1 14444
+ * For testing use netcat: nc -v 127.0.0.1 4444
  * Examples (request + response(s)):
  * - PostUser_Req(aap@aap.nl,learnId,1234AB)
  *      PostUser_Resp(User(5b7931797ae2185d01fb7470,learnId,aap@aap.nl,1234AB))
@@ -29,7 +29,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * - GetUserByEmail_Req(aap@aap.nl)
  *      GetUser_Resp(User(5b7931797ae2185d01fb7470,learnId,aap@aap.nl,1234AB),
  *      GetUser_Resp(User(5b7931797ae2185d01fb7470,learnId,aap@aap.nl,1234AB),User(5b7932197ae2185d01fb7471,learnId,aap@aap.nl,1234CD))
- *      GetUser_Resp_Err()
+ *      GetUser_Resp_Err(404)
  * - GetUserById_Req(5b7931797ae2185d01fb7470)
  *      GetUser_Resp(User(5b7931797ae2185d01fb7470,learnId,aap@aap.nl,1234AB))
  *      GetUser_Resp_Err(404)
@@ -118,6 +118,8 @@ public class VdekMockAdaptor {
     private static String callApi(String line) {
         String response;
         List<String> tokens;
+
+        line.replace("\"", "");
 
         response = checkInput(line);
         if (response.length() > 0) {
@@ -208,9 +210,10 @@ public class VdekMockAdaptor {
     }
 
 
+
     private static String GetUsersByEmail(List<String> tokens) {
         RestTemplate restTemplate;
-        String response = "";
+        String response;
 
         UriComponentsBuilder builder = UriComponentsBuilder
                 .fromUriString(baseUrl + "/users")
@@ -222,25 +225,13 @@ public class VdekMockAdaptor {
             String re = restTemplate.getForObject(uriBuilder, String.class);
 
             JSONArray users = new JSONArray(re);
-            if (users.length() == 0) {
-                response = "GetUser_Resp_Err(404)";
-            } else {
-                for (int i = 0; i < users.length(); i++) {
-                    if (!StringUtils.isEmpty(response)) {
-                        response = response + ",";
-                    }
-                    response = response + makeUserOutput(users.getJSONObject(i));
-                    System.out.println(response);
-                }
-                response = "GetUser_Resp(" + response + ")";
-            }
+            response = "GetUser_Resp(" + addUserToUserList(users) + ")";
         } catch (HttpClientErrorException ex) {
             response = "GetUser_Resp_Err(" + ex.getRawStatusCode() + ")";
         }
 
         return response;
     }
-
 
     private static String getShipmentById(List<String> tokens) {
         String url = baseUrl + "/shipments/" + tokens.get(1);
@@ -329,8 +320,25 @@ public class VdekMockAdaptor {
         return response;
     }
 
+
+
+    private static String addUserToUserList(JSONArray users) {
+        if(users.length() == 0) {
+            return "Nil";
+        } else {
+            String response = "usr(" + makeUserOutput(users.getJSONObject(0)) + ",";
+            users.remove(0);
+            return response + addUserToUserList(users) + ")";
+        }
+    }
+
+
     private static String makeUserOutput(JSONObject user) {
         String response = "";
+
+        String id = user.get("id").toString();
+        user.remove("id");
+        user.put("id", "\"" + id + "\"");
 
         List<String> attributes =  Arrays.asList("id", "label", "email", "postalCode");
         for(String attribute:attributes){
@@ -343,6 +351,9 @@ public class VdekMockAdaptor {
             }
         }
         return "User(" + response + ")";
+
+        //GetUser_Resp(Usr(User("5bb50b219a246a11474a2803",learnId,aap@aap.nl,1234AB), Usr(User("5bb50b219a246a11474a2803",learnId,aap@aap.nl,4321BA), Nil)))
+
     }
 
     private static String makeUserClaimOutput(JSONObject userClaim) {
