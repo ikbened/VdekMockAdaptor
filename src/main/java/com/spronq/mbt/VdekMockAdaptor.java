@@ -20,27 +20,37 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+
+
 /**
  * For testing use netcat: nc -v 127.0.0.1 4444
  * Examples (request + response(s)):
- * - PostUser_Req(aap@aap.nl,learnId,1234AB)
- *      PostUser_Resp(User(5b7931797ae2185d01fb7470,learnId,aap@aap.nl,1234AB))
- *      PostUser_Resp_Err(400)
- * - GetUserByEmail_Req(aap@aap.nl)
- *      GetUser_Resp(User(5b7931797ae2185d01fb7470,learnId,aap@aap.nl,1234AB),
- *      GetUser_Resp(User(5b7931797ae2185d01fb7470,learnId,aap@aap.nl,1234AB),User(5b7932197ae2185d01fb7471,learnId,aap@aap.nl,1234CD))
- *      GetUser_Resp_Err(404)
- * - GetUserById_Req(5b7931797ae2185d01fb7470)
- *      GetUser_Resp(User(5b7931797ae2185d01fb7470,learnId,aap@aap.nl,1234AB))
- *      GetUser_Resp_Err(404)
- * - PostUserClaim_Req(5b7933b27ae2185d01fb7472,customerNumber,1819)
- *      PostUserClaim_Resp(UserClaim(5b793d4d7ae2185d01fb7475,5b7933b27ae2185d01fb7472,customerNumber,1819))
- * - GetUserClaimsByUserId_req(5b7933b27ae2185d01fb7472)
- *      GetUserClaims_Resp(UserClaim(5b7934007ae2185d01fb7473,5b7933b27ae2185d01fb7472,customerNumber,1819),UserClaim(5b79363d7ae2185d01fb7474,5b7933b27ae2185d01fb7472,customerNumber,1920),UserClaim(5b793d4d7ae2185d01fb7475,5b7933b27ae2185d01fb7472,customerNumber,2021))
- * - PostShipment_req(cust@mailinator.com,user@mailinator.com,18)
- *      PostShipment_Resp(5b793f7a7ae2185d01fb7476,cust@mailinator.com,user@mailinator.com,true,)
- *      PostShipment_Resp_Err(400)
- *      PostShipment_Resp(5b793fe67ae2185d01fb7477,aap@aap.nl,user@mailinator.com,false,Customer email is not unique within LearnId)
+ *
+ * PostUser_Req(aap@aap.nl,learnId,1234AB)
+ * PostUser_Resp(User("5bbcb5e783e6756ffce52ea7",learnId,aap@aap.nl,1234AB))
+ * PostUser_Resp_Err(400)
+ *
+ * GetUserByEmail_Req(aap@aap.nl)
+ * GetUser_Resp(usr(User("5bbcac0f83e6756ffce52ea6",learnId,bokito@aap.nl,1234AB),Nil))
+ * GetUser_Resp(usr(User("5bbcabab83e6756ffce52ea4",learnId,aap@aap.nl,1234AB),usr(User("5bbcabb583e6756ffce52ea5",learnId,aap@aap.nl,4321BA),Nil)))
+ * GetUser_Resp(Nil)
+ * GetUser_Resp_Err(404)
+ *
+ * GetUserById_Req(5b7931797ae2185d01fb7470)
+ * GetUser_Resp(User(5b7931797ae2185d01fb7470,learnId,aap@aap.nl,1234AB))
+ * GetUser_Resp(Nil)
+ * GetUser_Resp_Err(404)
+ *
+ * PostUserClaim_Req(5b7933b27ae2185d01fb7472,customerNumber,1819)
+ * PostUserClaim_Resp(UserClaim(5b793d4d7ae2185d01fb7475,5b7933b27ae2185d01fb7472,customerNumber,1819))
+ *
+ * GetUserClaimsByUserId_req(5bbcabab83e6756ffce52ea4)
+ * GetUserClaims_Resp(usrclm(UserClaim(5bbcef2783e6756ffce52ea8,5bbcabab83e6756ffce52ea4,customerNumber,1819),Nil))
+ *
+ * PostShipment_req(cust@mailinator.com,user@mailinator.com,18)
+ * PostShipment_Resp(5b793f7a7ae2185d01fb7476,cust@mailinator.com,user@mailinator.com,true,)
+ * PostShipment_Resp_Err(400)
+ * PostShipment_Resp(5b793fe67ae2185d01fb7477,aap@aap.nl,user@mailinator.com,false,Customer email is not unique within LearnId)
  */
 public class VdekMockAdaptor {
     private static String baseUrl;
@@ -110,7 +120,10 @@ public class VdekMockAdaptor {
             }
 
         }
-        tokens.add(s.substring(j+1, i));
+
+        if (j+1 < i) {
+            tokens.add(s.substring(j+1, i));
+        }
 
         return tokens;
     }
@@ -121,12 +134,13 @@ public class VdekMockAdaptor {
 
         line.replace("\"", "");
 
-        response = checkInput(line);
-        if (response.length() > 0) {
-            return response;
-        } else {
-            tokens = mySplit(line);
+        //response = checkInput(line);
+
+        if (!line.matches("^\\w*\\(.*\\)")) {
+            return "InputFormatError";
         }
+
+        tokens = mySplit(line);
 
         switch (tokens.get(0).toUpperCase()) {
             case "POSTUSER_REQ":
@@ -159,11 +173,11 @@ public class VdekMockAdaptor {
     }
 
     private static String PostUser(List<String> tokens) {
-        String response;
-
         if (tokens.size() != 4){
-            response = "PostUser_Resp_Err(400)";
-        } else {
+            return "PostUser_Resp_Err(400)";
+        }
+
+        try {
             RestTemplate restTemplate  = new RestTemplate();
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.set("Content-Type", "application/json");
@@ -174,90 +188,82 @@ public class VdekMockAdaptor {
                     .put("label", tokens.get(2))
                     .put("postalCode", tokens.get(3));
 
-            try {
-                HttpEntity<String> httpEntity = new HttpEntity<>(user.toString(), httpHeaders);
-                String re = restTemplate.postForObject(baseUrl + "/users", httpEntity, String.class);
-                response = makeUserOutput(new JSONObject(re));
-                response = "PostUser_Resp(" + response + ")";
-            } catch (HttpClientErrorException ex) {
-                response = "PostUser_Resp_Err(" + ex.getRawStatusCode() + ")";
-            }
-
+            HttpEntity<String> httpEntity = new HttpEntity<>(user.toString(), httpHeaders);
+            String re = restTemplate.postForObject(baseUrl + "/users", httpEntity, String.class);
+            return "PostUser_Resp(" + jsonToStreamUser(new JSONObject(re)) + ")";
+        } catch (HttpClientErrorException ex) {
+            return "PostUser_Resp_Err(" + ex.getRawStatusCode() + ")";
         }
 
-        return response;
     }
 
 
     private static String GetUserById(List<String> tokens) {
-        RestTemplate restTemplate;
-        String response;
-
-        UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(baseUrl + "/users/" + tokens.get(1));
-        String uriBuilder = builder.build().encode().toUriString();
-
-        try {
-            restTemplate = new RestTemplate();
-            String re = restTemplate.getForObject(uriBuilder, String.class);
-            response = makeUserOutput(new JSONObject(re));
-            response = "GetUser_Resp(" + response + ")";
-        } catch (HttpClientErrorException ex) {
-            response = "GetUser_Resp_Err(" + ex.getRawStatusCode() + ")";
+        if (tokens.size() != 2){
+            return "GetUser_Resp_Err(400)";
         }
 
-        return response;
-    }
+        try {
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromUriString(baseUrl + "/users/" + tokens.get(1));
+            String uriBuilder = builder.build().encode().toUriString();
 
+            RestTemplate restTemplate = new RestTemplate();
+            String re = restTemplate.getForObject(uriBuilder, String.class);
+            return "GetUser_Resp(" + jsonToStreamUser(new JSONObject(re)) + ")";
+        } catch (HttpClientErrorException ex) {
+            return "GetUser_Resp_Err(" + ex.getRawStatusCode() + ")";
+        }
+
+    }
 
 
     private static String GetUsersByEmail(List<String> tokens) {
-        RestTemplate restTemplate;
-        String response;
-
-        UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(baseUrl + "/users")
-                .queryParam("email", tokens.get(1));
-        String uriBuilder = builder.build().encode().toUriString();
+        if(tokens.size() != 2) {
+            return "GetUser_Resp_Err(400)";
+        }
 
         try {
-            restTemplate = new RestTemplate();
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromUriString(baseUrl + "/users")
+                    .queryParam("email", tokens.get(1));
+            String uriBuilder = builder.build().encode().toUriString();
+
+            RestTemplate restTemplate = new RestTemplate();
             String re = restTemplate.getForObject(uriBuilder, String.class);
 
             JSONArray users = new JSONArray(re);
-            response = "GetUser_Resp(" + addUserToUserList(users) + ")";
+            return "GetUser_Resp(" + jsonToStreamUsers(users) + ")";
         } catch (HttpClientErrorException ex) {
-            response = "GetUser_Resp_Err(" + ex.getRawStatusCode() + ")";
+            return "GetUser_Resp_Err(" + ex.getRawStatusCode() + ")";
         }
 
-        return response;
     }
 
     private static String getShipmentById(List<String> tokens) {
-        String url = baseUrl + "/shipments/" + tokens.get(1);
-        RestTemplate restTemplate;
-        String response;
-
-        try {
-            restTemplate = new RestTemplate();
-            ResponseEntity re = restTemplate.getForEntity(url, String.class);
-            response = makeShipmentOutput(new JSONObject(re.getBody().toString()));
-            response = "GetShipment_Resp(" + response + ")";
-        } catch (HttpClientErrorException ex) {
-            response = "GetShipment_Resp_Err(" + ex.getRawStatusCode() + ")";
+        if(tokens.size() != 2) {
+            return "GetShipment_Resp_Err(400)";
         }
 
-        return response;
+        try {
+            String url = baseUrl + "/shipments/" + tokens.get(1);
+            RestTemplate restTemplate;
+
+            restTemplate = new RestTemplate();
+            ResponseEntity re = restTemplate.getForEntity(url, String.class);
+            return "GetShipment_Resp(" + jsonToStreamShipment(new JSONObject(re.getBody().toString())) + ")";
+        } catch (HttpClientErrorException ex) {
+            return  "GetShipment_Resp_Err(" + ex.getRawStatusCode() + ")";
+        }
+
     }
 
     private static String PostShipment(List<String> tokens) {
-        RestTemplate restTemplate  = new RestTemplate();
-        String response;
-
         if (tokens.size() != 4) {
-            response = "PostShipment_Resp_Err(400)";
-        } else {
+            return "PostShipment_Resp_Err(400)";
+        }
 
+        try {
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.set("Content-Type", "application/json");
 
@@ -292,19 +298,18 @@ public class VdekMockAdaptor {
                     .put("displayName", "SomeDisplayName")
                     .put("emailUser", tokens.get(2));
 
-            try {
-                HttpEntity<String> httpEntity = new HttpEntity<>(extShipment.toString(), httpHeaders);
-                String re = restTemplate.postForObject(baseUrl + "/shipments", httpEntity, String.class);
-                response = makeShipmentOutput(new JSONObject(re));
-                response = "PostShipment_Resp(" + response + ")";
-            } catch (HttpClientErrorException ex) {
-                response = "PostShipment_Resp_Err(" + ex.getRawStatusCode() + ")";
-            }
+            RestTemplate restTemplate  = new RestTemplate();
+            HttpEntity<String> httpEntity = new HttpEntity<>(extShipment.toString(), httpHeaders);
+            String re = restTemplate.postForObject(baseUrl + "/shipments", httpEntity, String.class);
+            return "PostShipment_Resp(" + jsonToStreamShipment(new JSONObject(re)) + ")";
+        } catch (HttpClientErrorException ex) {
+            return "PostShipment_Resp_Err(" + ex.getRawStatusCode() + ")";
         }
-        return response;
+
+
     }
 
-    private static String makeShipmentOutput(JSONObject shipment) {
+    private static String jsonToStreamShipment(JSONObject shipment) {
         List<String> attributes =  Arrays.asList("shipmentId","emailAddress","emailUser","processedByTask","errorMessage");
         String response = "";
 
@@ -322,18 +327,18 @@ public class VdekMockAdaptor {
 
 
 
-    private static String addUserToUserList(JSONArray users) {
+    private static String jsonToStreamUsers(JSONArray users) {
         if(users.length() == 0) {
             return "Nil";
         } else {
-            String response = "usr(" + makeUserOutput(users.getJSONObject(0)) + ",";
+            String response = "usr(" + jsonToStreamUser(users.getJSONObject(0)) + ",";
             users.remove(0);
-            return response + addUserToUserList(users) + ")";
+            return response + jsonToStreamUsers(users) + ")";
         }
     }
 
 
-    private static String makeUserOutput(JSONObject user) {
+    private static String jsonToStreamUser(JSONObject user) {
         String response = "";
 
         String id = user.get("id").toString();
@@ -356,7 +361,17 @@ public class VdekMockAdaptor {
 
     }
 
-    private static String makeUserClaimOutput(JSONObject userClaim) {
+    private static String jsonToStreamUserClaims(JSONArray userClaims) {
+        if(userClaims.length() == 0) {
+            return "Nil";
+        } else {
+            String response = "usrclm(" + jsonToStreamUserClaim(userClaims.getJSONObject(0)) + ",";
+            userClaims.remove(0);
+            return response + jsonToStreamUserClaims(userClaims) + ")";
+        }
+    }
+
+    private static String jsonToStreamUserClaim(JSONObject userClaim) {
         String response = "";
 
         List<String> attributes =  Arrays.asList("id", "userId", "claimType", "claimValue");
@@ -373,47 +388,35 @@ public class VdekMockAdaptor {
     }
 
     private static String getUserClaimsByUserId(List<String> tokens) {
-        RestTemplate restTemplate;
-        String response = "";
-
-        UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(baseUrl + "/userclaims")
-                .queryParam("userId", tokens.get(1));
-        String uriBuilder = builder.build().encode().toUriString();
+        if (tokens.size() != 2) {
+            return "GetUserClaims_Resp_Err(400)";
+        }
 
         try {
-            restTemplate = new RestTemplate();
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromUriString(baseUrl + "/userclaims")
+                    .queryParam("userId", tokens.get(1));
+            String uriBuilder = builder.build().encode().toUriString();
+
+
+            RestTemplate restTemplate = new RestTemplate();
             String re = restTemplate.getForObject(uriBuilder, String.class);
 
             JSONArray uc = new JSONArray(re);
 
-            if(uc.length() == 0) {
-                response = "GetUserClaims_Resp_Err(404)";
-            } else {
-                for (int i = 0; i < uc.length(); i++) {
-                    if (!StringUtils.isEmpty(response)) {
-                        response = response + ",";
-                    }
-                    response = response + makeUserClaimOutput(uc.getJSONObject(i));
-                    System.out.println(response);
-                }
-                response = "GetUserClaims_Resp(" + response + ")";
-            }
+            return "GetUserClaims_Resp(" + jsonToStreamUserClaims(uc) + ")";
         } catch (HttpClientErrorException ex) {
-            response = "GetUserClaims_Resp_Err(" + ex.getRawStatusCode() + ")";
+            return "GetUserClaims_Resp_Err(" + ex.getRawStatusCode() + ")";
         }
-
-        return response;
 
     }
 
     private static String postUserClaim(List<String> tokens) {
-        RestTemplate restTemplate  = new RestTemplate();
-        String response;
-
         if (tokens.size() != 4) {
-            response = "PostShipment_Resp_Err(400)";
-        } else {
+            return "PostShipment_Resp_Err(400)";
+        }
+
+        try {
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.set("Content-Type", "application/json");
 
@@ -423,15 +426,13 @@ public class VdekMockAdaptor {
                     .put("claimType", tokens.get(2))
                     .put("claimValue", tokens.get(3));
 
-            try {
-                HttpEntity<String> httpEntity = new HttpEntity<>(uc.toString(), httpHeaders);
-                String re = restTemplate.postForObject(baseUrl + "/userclaims", httpEntity, String.class);
-                response = makeUserClaimOutput(new JSONObject(re));
-                response = "PostUserClaim_Resp(" + response + ")";
-            } catch (HttpClientErrorException ex) {
-                response = "PostUserClaim_Resp_Err(" + ex.getRawStatusCode() + ")";
-            }
+            RestTemplate restTemplate  = new RestTemplate();
+            HttpEntity<String> httpEntity = new HttpEntity<>(uc.toString(), httpHeaders);
+            String re = restTemplate.postForObject(baseUrl + "/userclaims", httpEntity, String.class);
+            return "PostUserClaim_Resp(" + jsonToStreamUserClaim(new JSONObject(re)) + ")";
+        } catch (HttpClientErrorException ex) {
+            return "PostUserClaim_Resp_Err(" + ex.getRawStatusCode() + ")";
         }
-        return response;
+
     }
 }
