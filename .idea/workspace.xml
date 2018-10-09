@@ -6,12 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f5813147-26be-4a03-a6a2-63d362bc480d" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/edh.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/spronq/mbt/VdekMockAdaptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spronq/mbt/VdekMockAdaptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/spronq/mbt/VdekMockAdaptor.class" beforeDir="false" />
-    </list>
+    <list default="true" id="f5813147-26be-4a03-a6a2-63d362bc480d" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -415,7 +410,7 @@
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5007153" side_tool="true" weight="0.32848486" />
       <window_info anchor="right" id="Maven Projects" order="3" visible="true" weight="0.14020029" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49928468" visible="true" weight="0.32848486" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49928468" weight="0.32848486" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.49928468" weight="0.32969698" />
       <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49928468" weight="0.32969698" />
       <window_info id="Capture Tool" order="2" />
