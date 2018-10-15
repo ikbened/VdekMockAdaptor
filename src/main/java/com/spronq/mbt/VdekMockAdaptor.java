@@ -51,6 +51,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * PostShipment_Resp(5b793f7a7ae2185d01fb7476,cust@mailinator.com,user@mailinator.com,true,)
  * PostShipment_Resp_Err(400)
  * PostShipment_Resp(5b793fe67ae2185d01fb7477,aap@aap.nl,user@mailinator.com,false,Customer email is not unique within LearnId)
+ *
  */
 public class VdekMockAdaptor {
     private static String baseUrl;
