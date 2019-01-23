@@ -332,7 +332,7 @@ public class VdekMockAdaptor {
         if(users.length() == 0) {
             return "Nil";
         } else {
-            String response = "usr(" + jsonToStreamUser(users.getJSONObject(0)) + ",";
+            String response = "Const(" + jsonToStreamUser(users.getJSONObject(0)) + ",";
             users.remove(0);
             return response + jsonToStreamUsers(users) + ")";
         }
