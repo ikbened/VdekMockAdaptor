@@ -10,8 +10,6 @@ build:
 
 
 build-docker-image:
-  box:
-    id: openjdk:8-jre-slim
   steps:
     - script:
           name: remove pipeline/source leave wercker.yml
