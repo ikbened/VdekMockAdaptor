@@ -28,8 +28,13 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/spronq/mbt/VdekMockAdaptor.java">
           <provider selected="true" editor-type-id="text-editor">
 <<<<<<< HEAD
+<<<<<<< HEAD
             <state relative-caret-position="-258">
               <caret line="28" column="41" selection-start-line="28" selection-start-column="35" selection-end-line="28" selection-end-column="41" />
+=======
+            <state relative-caret-position="254">
+              <caret line="330" column="26" selection-start-line="330" selection-start-column="26" selection-end-line="330" selection-end-column="26" />
+>>>>>>> parent of d842828... Trying to fix NPE
 =======
             <state relative-caret-position="254">
               <caret line="330" column="26" selection-start-line="330" selection-start-column="26" selection-end-line="330" selection-end-column="26" />
@@ -99,8 +104,13 @@
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
 <<<<<<< HEAD
+<<<<<<< HEAD
             <state relative-caret-position="370">
               <caret line="103" column="19" selection-start-line="103" selection-start-column="19" selection-end-line="103" selection-end-column="19" />
+=======
+            <state relative-caret-position="1545">
+              <caret line="103" selection-start-line="103" selection-end-line="103" />
+>>>>>>> parent of d842828... Trying to fix NPE
 =======
             <state relative-caret-position="1545">
               <caret line="103" selection-start-line="103" selection-end-line="103" />
@@ -137,9 +147,15 @@
         <option value="$PROJECT_DIR$/src/main/java/com/spronq/mbt/In.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/spronq/mbt/Out.java" />
 <<<<<<< HEAD
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/src/main/java/com/spronq/mbt/VdekMockAdaptor.java" />
         <option value="$PROJECT_DIR$/wercker.yml" />
         <option value="$PROJECT_DIR$/pom.xml" />
+=======
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/wercker.yml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spronq/mbt/VdekMockAdaptor.java" />
+>>>>>>> parent of d842828... Trying to fix NPE
 =======
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/wercker.yml" />
@@ -433,7 +449,11 @@
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
 <<<<<<< HEAD
+<<<<<<< HEAD
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49909583" visible="true" weight="0.23891273" />
+=======
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49909583" visible="true" weight="0.2274678" />
+>>>>>>> parent of d842828... Trying to fix NPE
 =======
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49909583" visible="true" weight="0.2274678" />
 >>>>>>> parent of d842828... Trying to fix NPE
@@ -876,6 +896,7 @@
       </provider>
     </entry>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/wercker.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
@@ -895,10 +916,15 @@
         <state relative-caret-position="370">
           <caret line="103" column="19" selection-start-line="103" selection-start-column="19" selection-end-line="103" selection-end-column="19" />
 =======
+=======
+>>>>>>> parent of d842828... Trying to fix NPE
     <entry file="file://$PROJECT_DIR$/src/test/java/com/spronq/mbt/VdekMockAdaptorTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+<<<<<<< HEAD
+>>>>>>> parent of d842828... Trying to fix NPE
+=======
 >>>>>>> parent of d842828... Trying to fix NPE
         </state>
       </provider>
@@ -906,8 +932,13 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/com/spronq/mbt/VdekMockAdaptor.java">
       <provider selected="true" editor-type-id="text-editor">
 <<<<<<< HEAD
+<<<<<<< HEAD
         <state relative-caret-position="-258">
           <caret line="28" column="41" selection-start-line="28" selection-start-column="35" selection-end-line="28" selection-end-column="41" />
+=======
+        <state relative-caret-position="254">
+          <caret line="330" column="26" selection-start-line="330" selection-start-column="26" selection-end-line="330" selection-end-column="26" />
+>>>>>>> parent of d842828... Trying to fix NPE
 =======
         <state relative-caret-position="254">
           <caret line="330" column="26" selection-start-line="330" selection-start-column="26" selection-end-line="330" selection-end-column="26" />
