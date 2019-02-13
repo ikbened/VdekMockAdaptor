@@ -7,7 +7,7 @@ WORKDIR /app
 COPY --from=0 /app/VdekMockAdaptor /app 
 RUN mvn install 
 
-FROM openjdk:8-jre-alpine
+FROM openjdk:8-jre-slim
 WORKDIR /app
 COPY --from=1 /app/target/VdekMockAdaptor-1.0-SNAPSHOT.jar /app
 EXPOSE 4444 
