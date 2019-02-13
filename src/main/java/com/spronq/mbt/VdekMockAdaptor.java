@@ -59,6 +59,7 @@ public class VdekMockAdaptor {
     public static void main(String[] args) throws IOException {
         int port = 4444;
 
+
         baseUrl = System.getenv("VdekMockAddress");
         System.out.println("baseUrl: " + baseUrl);
         if (StringUtils.isEmpty(baseUrl)) {
