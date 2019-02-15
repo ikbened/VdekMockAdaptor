@@ -1,38 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-
-  <groupId>com.spronq.mbt</groupId>
-  <artifactId>VdekMockAdaptor</artifactId>
-  <version>1.0-SNAPSHOT</version>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.spronq.mbt</groupId>
+    <artifactId>VdekMockAdaptor</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
-  <name>VdekMockAdaptor</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
-
+    <name>VdekMockAdaptor</name>
+    <!-- FIXME change it to the project's website -->
+    <url>http://www.example.com</url>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.0.1.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <docker.repo>vdekadaptor</docker.repo>
+        <docker.tag>latest</docker.tag>
+        <springfox.version>2.8.0</springfox.version>
+    </properties>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
-      <docker.repo>vdekadaptor</docker.repo>
-      <docker.tag>latest</docker.tag>
-      <springfox.version>2.8.0</springfox.version>
-  </properties>
-
-  <dependencies>
-
+    <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
@@ -41,12 +34,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -61,46 +52,24 @@
             <artifactId>reactor-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!-- Swagger/Springfox deps -->
-        <!--
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>1.5.10.RELEASE</version>
-        </dependency>
-		-->
-
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
             <version>${springfox.version}</version>
             <scope>compile</scope>
         </dependency>
-
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
             <version>${springfox.version}</version>
             <scope>compile</scope>
         </dependency>
-
-        <!--
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>4.3.13.RELEASE</version>
-        </dependency>
-        -->
-
         <!-- Project Lombok for easier data classes -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.4</version>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
         <dependency>
             <groupId>io.rest-assured</groupId>
@@ -108,148 +77,48 @@
             <version>3.1.0</version>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20180130</version>
+        </dependency>
+    </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>
 
-      <!--&#45;&#45;&#45;&#45;-->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.2</version>
+            </plugin>
 
-    <!--<dependency>-->
-      <!--<groupId>junit</groupId>-->
-      <!--<artifactId>junit</artifactId>-->
-      <!--<version>4.11</version>-->
-      <!--<scope>test</scope>-->
-    <!--</dependency>-->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+            </plugin>
 
-    <!-- https://mvnrepository.com/artifact/org.json/json -->
-    <dependency>
-      <groupId>org.json</groupId>
-      <artifactId>json</artifactId>
-      <version>20180130</version>
-    </dependency>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.21.0</version>
+            </plugin>
 
-
-    <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web &ndash;&gt;-->
-    <!--<dependency>-->
-      <!--<groupId>org.springframework.boot</groupId>-->
-      <!--<artifactId>spring-boot-starter-web</artifactId>-->
-      <!--<version>2.0.4.RELEASE</version>-->
-    <!--</dependency>-->
-
-    <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test &ndash;&gt;-->
-    <!--<dependency>-->
-      <!--<groupId>org.springframework.boot</groupId>-->
-      <!--<artifactId>spring-boot-starter-test</artifactId>-->
-      <!--<version>2.0.4.RELEASE</version>-->
-      <!--<scope>test</scope>-->
-    <!--</dependency>-->
-
-    <!--<dependency>-->
-          <!--<groupId>com.fasterxml.jackson.core</groupId>-->
-          <!--<artifactId>jackson-core</artifactId>-->
-          <!--<version>2.8.7</version>-->
-      <!--</dependency>-->
-      <!--<dependency>-->
-          <!--<groupId>com.fasterxml.jackson.core</groupId>-->
-          <!--<artifactId>jackson-databind</artifactId>-->
-          <!--<version>2.8.7</version>-->
-      <!--</dependency>-->
-      <!--<dependency>-->
-          <!--<groupId>org.springframework</groupId>-->
-          <!--<artifactId>spring-web</artifactId>-->
-          <!--<version>4.3.6.RELEASE</version>-->
-      <!--</dependency>-->
-
-  </dependencies>
-
-    <!--<profiles>-->
-        <!--<profile>-->
-            <!--<id>docker</id>-->
-            <!--<build>-->
-                <!--<plugins>-->
-                    <!--<plugin>-->
-                        <!--<groupId>com.spotify</groupId>-->
-                        <!--<artifactId>dockerfile-maven-plugin</artifactId>-->
-                        <!--<version>${docker-maven.version}</version>-->
-                        <!--<executions>-->
-                            <!--<execution>-->
-                                <!--<id>default</id>-->
-                                <!--<goals>-->
-                                    <!--<goal>build</goal>-->
-                                    <!--&lt;!&ndash;goal>push</goal&ndash;&gt;-->
-                                <!--</goals>-->
-                            <!--</execution>-->
-                        <!--</executions>-->
-                        <!--<configuration>-->
-                            <!--<buildArgs>-->
-                                <!--<JAR_VERSION>${project.version}</JAR_VERSION>-->
-                            <!--</buildArgs>-->
-                            <!--<repository>${docker.repo}</repository>-->
-                            <!--<tag>${docker.tag}</tag>-->
-                        <!--</configuration>-->
-                    <!--</plugin>-->
-                <!--</plugins>-->
-            <!--</build>-->
-        <!--</profile>-->
-    <!--</profiles>-->
-
-  <build>
-      <!--<sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>-->
-    <!--<pluginManagement>&lt;!&ndash; lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) &ndash;&gt;-->
-      <plugins>
-        <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.0.0</version>
-        </plugin>
-        <!-- see http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
-        <plugin>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>3.0.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.7.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.21.0</version>
-        </plugin>
-
-        <plugin>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>3.1.1</version>
-          <configuration>
-                <archive>
-                    <manifest>
-                        <addClasspath>true</addClasspath>
-                        <mainClass>com.spronq.mbt.VdekMockAdaptor</mainClass>
-                    </manifest>
-                </archive>
-            </configuration>
-        </plugin>
-        <!--<plugin>-->
-          <!--<artifactId>maven-install-plugin</artifactId>-->
-          <!--<version>2.5.2</version>-->
-        <!--</plugin>-->
-        <!--<plugin>-->
-          <!--<artifactId>maven-deploy-plugin</artifactId>-->
-          <!--<version>2.8.2</version>-->
-        <!--</plugin>-->
-          <!--<plugin>-->
-              <!--<groupId>org.springframework.boot</groupId>-->
-              <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
-              <!--<configuration>-->
-                  <!--<finalName>vdekadaptor</finalName>-->
-                  <!--<layout>JAR</layout>-->
-              <!--</configuration>-->
-              <!--&lt;!&ndash;<executions>&ndash;&gt;-->
-
-                  <!--&lt;!&ndash;<execution>&ndash;&gt;-->
-                      <!--&lt;!&ndash;<goals>&ndash;&gt;-->
-                          <!--&lt;!&ndash;<goal>package</goal>&ndash;&gt;-->
-                      <!--&lt;!&ndash;</goals>&ndash;&gt;-->
-                  <!--&lt;!&ndash;</execution>&ndash;&gt;-->
-              <!--&lt;!&ndash;</executions>&ndash;&gt;-->
-          <!--</plugin>-->
-
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>com.spronq.mbt.VdekMockAdaptor</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -274,123 +143,9 @@
                             </artifactSet>
                         </configuration>
                     </execution>
-
-
-                    <!--<execution>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>shade</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                            <!--<transformers>-->
-                                <!--<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">-->
-                                    <!--<mainClass>com.spronq.mbt.VdekMockAdaptor</mainClass>-->
-                                    <!--<manifestEntries>-->
-                                        <!--<Main-Class>com.spronq.mbt.VdekMockAdaptor</Main-Class>-->
-                                        <!--<Build-Number>123</Build-Number>-->
-                                    <!--</manifestEntries>-->
-                                <!--</transformer>-->
-                            <!--</transformers>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
                 </executions>
             </plugin>
 
-
-          <!--<plugin>-->
-              <!--<artifactId>maven-assembly-plugin</artifactId>-->
-              <!--<configuration>-->
-                  <!--<archive>-->
-                      <!--<manifest>-->
-                          <!--<mainClass>com.spronq.mbt.VdekMockAdaptor</mainClass>-->
-                      <!--</manifest>-->
-                  <!--</archive>-->
-                  <!--<descriptorRefs>-->
-                      <!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
-                  <!--</descriptorRefs>-->
-              <!--</configuration>-->
-              <!--<executions>-->
-                  <!--<execution>-->
-                      <!--<id>make-assembly</id> &lt;!&ndash; this is used for inheritance merges &ndash;&gt;-->
-                      <!--<phase>package</phase> &lt;!&ndash; bind to the packaging phase &ndash;&gt;-->
-                      <!--<goals>-->
-                          <!--<goal>single</goal>-->
-                      <!--</goals>-->
-                  <!--</execution>-->
-              <!--</executions>-->
-          <!--</plugin>-->
-
-
-
-
-          <!--<plugin>-->
-              <!--<artifactId>maven-assembly-plugin</artifactId>-->
-              <!--<executions>-->
-                  <!--<execution>-->
-                      <!--<phase>package</phase>-->
-                      <!--<goals>-->
-                          <!--<goal>single</goal>-->
-                      <!--</goals>-->
-                  <!--</execution>-->
-              <!--</executions>-->
-              <!--<configuration>-->
-                  <!--<descriptorRefs>-->
-                      <!--<descriptorRef>dependencies</descriptorRef>-->
-                  <!--</descriptorRefs>-->
-              <!--</configuration>-->
-          <!--</plugin>-->
-
-          <!--<plugin>-->
-              <!--<groupId>org.apache.maven.plugins</groupId>-->
-              <!--<artifactId>maven-dependency-plugin</artifactId>-->
-              <!--<executions>-->
-                  <!--<execution>-->
-                      <!--<id>copy-dependencies</id>-->
-                      <!--<phase>prepare-package</phase>-->
-                      <!--<goals>-->
-                          <!--<goal>copy-dependencies</goal>-->
-                      <!--</goals>-->
-                      <!--<configuration>-->
-                          <!--<outputDirectory>${project.build.directory}/lib</outputDirectory>-->
-                          <!--<overWriteReleases>false</overWriteReleases>-->
-                          <!--<overWriteSnapshots>false</overWriteSnapshots>-->
-                          <!--<overWriteIfNewer>true</overWriteIfNewer>-->
-                      <!--</configuration>-->
-                  <!--</execution>-->
-              <!--</executions>-->
-          <!--</plugin>-->
-          <!--<plugin>-->
-              <!--<groupId>org.apache.maven.plugins</groupId>-->
-              <!--<artifactId>maven-jar-plugin</artifactId>-->
-              <!--<configuration>-->
-                  <!--<archive>-->
-                      <!--<manifest>-->
-                          <!--<addClasspath>true</addClasspath>-->
-                          <!--<classpathPrefix>lib/</classpathPrefix>-->
-                          <!--<mainClass>com.spronq.mbt.VdekMockAdaptor</mainClass>-->
-                      <!--</manifest>-->
-                  <!--</archive>-->
-              <!--</configuration>-->
-          <!--</plugin>-->
-
-
-          <!--<plugin>-->
-              <!--<groupId>org.springframework.boot</groupId>-->
-              <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
-              <!--<executions>-->
-                  <!--<execution>-->
-                      <!--<goals>-->
-                          <!--<goal>repackage</goal>-->
-                      <!--</goals>-->
-                      <!--<configuration>-->
-                          <!--<classifier>spring-boot</classifier>-->
-                          <!--<mainClass>com.spronq.mbt.VdekMockAdaptor</mainClass>-->
-                      <!--</configuration>-->
-                  <!--</execution>-->
-              <!--</executions>-->
-          <!--</plugin>-->
-
-      </plugins>
-    <!--</pluginManagement>-->
-  </build>
+        </plugins>
+    </build>
 </project>
