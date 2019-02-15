@@ -102,6 +102,7 @@
     </profiles>
 
   <build>
+      <!--<sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>-->
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <plugin>
@@ -121,22 +122,22 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.21.0</version>
         </plugin>
-        <plugin>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
+        <!--<plugin>-->
+          <!--<artifactId>maven-jar-plugin</artifactId>-->
+          <!--<version>3.0.2</version>-->
 
 
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>com.spronq.mbt.VdekMockAdaptor</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
+                <!--<configuration>-->
+                    <!--<archive>-->
+                        <!--<manifest>-->
+                            <!--<addClasspath>true</addClasspath>-->
+                            <!--<mainClass>com.spronq.mbt.VdekMockAdaptor</mainClass>-->
+                        <!--</manifest>-->
+                    <!--</archive>-->
+                <!--</configuration>-->
 
 
-        </plugin>
+        <!--</plugin>-->
         <!--<plugin>-->
           <!--<artifactId>maven-install-plugin</artifactId>-->
           <!--<version>2.5.2</version>-->
@@ -187,6 +188,101 @@
                     </execution>
                 </executions>
             </plugin>
+
+
+          <!--<plugin>-->
+              <!--<artifactId>maven-assembly-plugin</artifactId>-->
+              <!--<configuration>-->
+                  <!--<archive>-->
+                      <!--<manifest>-->
+                          <!--<mainClass>com.spronq.mbt.VdekMockAdaptor</mainClass>-->
+                      <!--</manifest>-->
+                  <!--</archive>-->
+                  <!--<descriptorRefs>-->
+                      <!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
+                  <!--</descriptorRefs>-->
+              <!--</configuration>-->
+              <!--<executions>-->
+                  <!--<execution>-->
+                      <!--<id>make-assembly</id> &lt;!&ndash; this is used for inheritance merges &ndash;&gt;-->
+                      <!--<phase>package</phase> &lt;!&ndash; bind to the packaging phase &ndash;&gt;-->
+                      <!--<goals>-->
+                          <!--<goal>single</goal>-->
+                      <!--</goals>-->
+                  <!--</execution>-->
+              <!--</executions>-->
+          <!--</plugin>-->
+
+
+
+
+          <!--<plugin>-->
+              <!--<artifactId>maven-assembly-plugin</artifactId>-->
+              <!--<executions>-->
+                  <!--<execution>-->
+                      <!--<phase>package</phase>-->
+                      <!--<goals>-->
+                          <!--<goal>single</goal>-->
+                      <!--</goals>-->
+                  <!--</execution>-->
+              <!--</executions>-->
+              <!--<configuration>-->
+                  <!--<descriptorRefs>-->
+                      <!--<descriptorRef>dependencies</descriptorRef>-->
+                  <!--</descriptorRefs>-->
+              <!--</configuration>-->
+          <!--</plugin>-->
+
+          <!--<plugin>-->
+              <!--<groupId>org.apache.maven.plugins</groupId>-->
+              <!--<artifactId>maven-dependency-plugin</artifactId>-->
+              <!--<executions>-->
+                  <!--<execution>-->
+                      <!--<id>copy-dependencies</id>-->
+                      <!--<phase>prepare-package</phase>-->
+                      <!--<goals>-->
+                          <!--<goal>copy-dependencies</goal>-->
+                      <!--</goals>-->
+                      <!--<configuration>-->
+                          <!--<outputDirectory>${project.build.directory}/lib</outputDirectory>-->
+                          <!--<overWriteReleases>false</overWriteReleases>-->
+                          <!--<overWriteSnapshots>false</overWriteSnapshots>-->
+                          <!--<overWriteIfNewer>true</overWriteIfNewer>-->
+                      <!--</configuration>-->
+                  <!--</execution>-->
+              <!--</executions>-->
+          <!--</plugin>-->
+          <!--<plugin>-->
+              <!--<groupId>org.apache.maven.plugins</groupId>-->
+              <!--<artifactId>maven-jar-plugin</artifactId>-->
+              <!--<configuration>-->
+                  <!--<archive>-->
+                      <!--<manifest>-->
+                          <!--<addClasspath>true</addClasspath>-->
+                          <!--<classpathPrefix>lib/</classpathPrefix>-->
+                          <!--<mainClass>com.spronq.mbt.VdekMockAdaptor</mainClass>-->
+                      <!--</manifest>-->
+                  <!--</archive>-->
+              <!--</configuration>-->
+          <!--</plugin>-->
+
+
+          <plugin>
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-maven-plugin</artifactId>
+              <executions>
+                  <execution>
+                      <goals>
+                          <goal>repackage</goal>
+                      </goals>
+                      <configuration>
+                          <classifier>spring-boot</classifier>
+                          <mainClass>com.spronq.mbt.VdekMockAdaptor</mainClass>
+                      </configuration>
+                  </execution>
+              </executions>
+          </plugin>
+
       </plugins>
     </pluginManagement>
   </build>
