@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.17.0 (a74acad)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: vdekmock
+  name: vdekmock
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: vdekmock
+    spec:
+      containers:
+      - image: edhi/vdekmock:latest
+        name: vdekmock
+        ports:
+        - containerPort: 8080
+        resources: {}
+      hostname: vdekmock
+      restartPolicy: Always
+status: {}
