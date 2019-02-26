@@ -1,5 +1,14 @@
 version: '3.1'
 services:
+  mongodb:
+    image: 'mongo:3.6'
+    ports:
+      - "27017:27017"
+    volumes:
+      - /Users/edh/DockerProjects/mongodb/data:/data/db
+    networks:
+      - vdek
+    hostname: mongodb
   vdekmock:
     image: edhi/vdekmock:latest
     networks:
@@ -7,15 +16,18 @@ services:
     hostname: vdekmock
     ports:
       - "18080:8080"
-  vdekmockadaptor:
-    image: edhi/vdekmockadaptor
-    networks:
-      - vdek
-    hostname: vdekmockadaptor
-    ports:
-      - "14444:4444"
     environment:
-      - VdekMockAddress=${VDEKMOCKADDRESS:-vdekmock:8080}
+      MONGODB_HOST: ${MONGODB_HOST:-mongodb}
+      MONGODB_PORT: ${MONGODB_PORT:-27017}
+#  vdekmockadaptor:
+#    image: edhi/vdekmockadaptor
+#    networks:
+#      - vdek
+#    hostname: vdekmockadaptor
+#    ports:
+#      - "14444:4444"
+#    environment:
+#      - VdekMockAddress=${VDEKMOCKADDRESS:-vdekmock:8080}
 networks:
   vdek:
     driver: bridge
