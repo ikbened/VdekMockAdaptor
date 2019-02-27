@@ -19,15 +19,19 @@ services:
     environment:
       MONGODB_HOST: ${MONGODB_HOST:-mongodb}
       MONGODB_PORT: ${MONGODB_PORT:-27017}
-#  vdekmockadaptor:
-#    image: edhi/vdekmockadaptor
-#    networks:
-#      - vdek
-#    hostname: vdekmockadaptor
-#    ports:
-#      - "14444:4444"
-#    environment:
-#      - VdekMockAddress=${VDEKMOCKADDRESS:-vdekmock:8080}
+    depends_on:
+      - mongodb
+  vdekmockadaptor:
+    image: edhi/vdekmockadaptor
+    networks:
+      - vdek
+    hostname: vdekmockadaptor
+    ports:
+      - "14444:4444"
+    environment:
+      VdekMockAddress: ${VDEKMOCKADDRESS:-vdekmock:8080}
+    depends_on:
+      - vdekmock
 networks:
   vdek:
     driver: bridge
