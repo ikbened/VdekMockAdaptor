@@ -18,7 +18,12 @@ spec:
         io.kompose.service: vdekmock
     spec:
       containers:
-      - image: edhi/vdekmock:latest
+      - env:
+        - name: MONGODB_HOST
+          value: mongodb
+        - name: MONGODB_PORT
+          value: "27017"
+        image: edhi/vdekmock:latest
         name: vdekmock
         ports:
         - containerPort: 8080

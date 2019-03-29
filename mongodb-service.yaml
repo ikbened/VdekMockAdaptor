@@ -6,15 +6,14 @@ metadata:
     kompose.version: 1.17.0 (a74acad)
   creationTimestamp: null
   labels:
-    io.kompose.service: vdekmockadaptor
-  name: vdekmockadaptor
+    io.kompose.service: mongodb
+  name: mongodb
 spec:
   ports:
-  - name: "4444"
-    protocol: TCP
-    port: 4444
-    targetPort: 4444
+  - name: "27017"
+    port: 27017
+    targetPort: 27017
   selector:
-    io.kompose.service: vdekmockadaptor
+    io.kompose.service: mongodb
 status:
   loadBalancer: {}

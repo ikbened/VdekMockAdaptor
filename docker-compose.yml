@@ -15,7 +15,7 @@ services:
       - vdek
     hostname: vdekmock
     ports:
-      - "18080:8080"
+      - "8080:8080"
     environment:
       MONGODB_HOST: ${MONGODB_HOST:-mongodb}
       MONGODB_PORT: ${MONGODB_PORT:-27017}
@@ -27,7 +27,7 @@ services:
       - vdek
     hostname: vdekmockadaptor
     ports:
-      - "14444:4444"
+      - "4444:4444"
     environment:
       VdekMockAddress: ${VDEKMOCKADDRESS:-vdekmock:8080}
     depends_on:

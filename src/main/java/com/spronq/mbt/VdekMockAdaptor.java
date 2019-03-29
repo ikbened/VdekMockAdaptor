@@ -64,6 +64,7 @@ public class VdekMockAdaptor {
         System.out.println("baseUrl: " + baseUrl);
         if (StringUtils.isEmpty(baseUrl)) {
             baseUrl = "localhost:8080";
+            
         }
         baseUrl = "http://" + baseUrl;
 
