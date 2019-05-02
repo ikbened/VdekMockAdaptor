@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import static org.slf4j.LoggerFactory.getLogger;
 
 
 /**
@@ -56,26 +58,24 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class VdekMockAdaptor {
     private static String baseUrl;
 
+    private static final Logger LOG = getLogger(VdekMockAdaptor.class);
+
     public static void main(String[] args) throws IOException {
         int port = 4444;
 
-
         baseUrl = System.getenv("VdekMockAddress");
-        System.out.println("baseUrl: " + baseUrl);
         if (StringUtils.isEmpty(baseUrl)) {
             baseUrl = "localhost:8080";
-            
         }
         baseUrl = "http://" + baseUrl;
 
-
         ServerSocket serverSocket = new ServerSocket(port, 50, InetAddress.getByAddress(new byte[]{0x00, 0x00, 0x00, 0x00}));
-        System.err.println("Started server on port " + port);
-        System.err.println("Communication with VdekMock on " + baseUrl);
+        LOG.debug("Started server on port " + port);
+        LOG.debug("Communication with VdekMock on " + baseUrl);
 
         while (true) {
             Socket clientSocket = serverSocket.accept();
-            System.err.println("Accepted connection from client: " + clientSocket.getRemoteSocketAddress());
+            LOG.debug("Accepted connection from client: " + clientSocket.getRemoteSocketAddress());
 
             In in = new In(clientSocket);
             Out out = new Out(clientSocket);
@@ -83,10 +83,10 @@ public class VdekMockAdaptor {
             String lineIn;
             String lineOut;
             while ((lineIn = in.readLine()) != null) {
-                System.out.println("in:  " + lineIn);
+                LOG.debug("in:  " + lineIn);
                 lineOut = callApi(lineIn);
                 out.println(lineOut);
-                System.out.println("out: " + lineOut);
+                LOG.debug("out: " + lineOut);
             }
 
             System.err.println("Closing connection with client: " + clientSocket.getInetAddress());
@@ -191,6 +191,7 @@ public class VdekMockAdaptor {
                     .put("label", tokens.get(2))
                     .put("postalCode", tokens.get(3));
 
+            LOG.debug("JSONObject user: " + user.toString());
             HttpEntity<String> httpEntity = new HttpEntity<>(user.toString(), httpHeaders);
             String re = restTemplate.postForObject(baseUrl + "/users", httpEntity, String.class);
             return "PostUser_Resp(" + jsonToStreamUser(new JSONObject(re)) + ")";

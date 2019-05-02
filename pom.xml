@@ -23,6 +23,7 @@
         <docker.repo>vdekadaptor</docker.repo>
         <docker.tag>latest</docker.tag>
         <springfox.version>2.8.0</springfox.version>
+        <ch.qos.logback.version>1.1.6</ch.qos.logback.version>
     </properties>
 
     <dependencies>
@@ -83,6 +84,48 @@
             <artifactId>json</artifactId>
             <version>20180130</version>
         </dependency>
+
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>4.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.18</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${ch.qos.logback.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${ch.qos.logback.version}</version>
+            <!--
+               Required for logging regular ILoggingEvents with a Logger.
+               Not needed if only logging IAccessEvents for access logs.
+            -->
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-access</artifactId>
+            <version>${ch.qos.logback.version}</version>
+            <!--
+               Required for logging IAccessEvents for access logs.
+               Not needed if only logging regular ILoggingEvents with a Logger.
+            -->
+            <optional>true</optional>
+        </dependency>
+
+
     </dependencies>
 
     <build>
