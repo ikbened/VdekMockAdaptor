@@ -16,7 +16,8 @@ services:
     hostname: vdekmock
     ports:
       - "8080:8080"
-#    environment:
+    environment:
+      LOGSTASH_ADDRESS: ${LOGSTASH_ADDRESS:-127.0.0.1:5000}
 #      MONGODB_HOST: ${MONGODB_HOST:-mongodb}
 #      MONGODB_PORT: ${MONGODB_PORT:-27017}
 #    depends_on:
@@ -29,7 +30,8 @@ services:
     ports:
       - "4444:4444"
     environment:
-      VdekMockAddress: ${VDEKMOCKADDRESS:-vdekmock:8080}
+      VDEK_MOCK_ADDRESS: ${VDEK_MOCK_ADDRESS:-vdekmock:8080}
+      LOGSTASH_ADDRESS: ${LOGSTASH_ADDRESS:-127.0.0.1:5000}
     depends_on:
       - vdekmock
 networks:
