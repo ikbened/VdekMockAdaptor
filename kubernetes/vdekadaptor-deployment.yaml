@@ -21,7 +21,7 @@ spec:
         - name: VDEK_MOCK_ADDRESS
           value: vdekmock:8080
         - name: LOGSTASH_ADDRESS
-          value: logstash:5000
+          value: logstash.vdek.spronq.com:5000
       hostname: vdekadaptor
       restartPolicy: Always
 

@@ -72,6 +72,7 @@ public class VdekMockAdaptor {
         ServerSocket serverSocket = new ServerSocket(port, 50, InetAddress.getByAddress(new byte[]{0x00, 0x00, 0x00, 0x00}));
         LOG.debug("Started server on port " + port);
         LOG.debug("Communication with VdekMock on " + baseUrl);
+        LOG.debug("Sending logs to: " + System.getenv("LOGSTASH_ADDRESS"));
 
         while (true) {
             Socket clientSocket = serverSocket.accept();

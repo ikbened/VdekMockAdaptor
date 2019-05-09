@@ -19,6 +19,6 @@ spec:
         - containerPort: 8080
         env:
         - name: LOGSTASH_ADDRESS
-          value: logstash:5000
+          value: logstash.vdek.spronq.com:5000
       hostname: vdekmock
       restartPolicy: Always
